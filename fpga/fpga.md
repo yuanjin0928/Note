@@ -13,3 +13,41 @@
 <img src="./assets/xvlog.PNG" alt="xvlog" style="zoom:150%;" />
 
 最后找到刚才安装的verilog扩展设置，将verilog的Linter更换成xvlog。
+
+# 命令行启动 Vivado
+
+```tcl
+vivado -mode <args>		# invocation mode, allowed values are 'gui', 'tcl', and 'batch'
+
+vivado -help	# get information about vivado related commands
+```
+
+# Vivado Tcl script
+
+Most actions run in the Vivado IDE result in a Tcl command being executed. The Tcl commands appear in the Vivado IDE Tcl Console and are also captured in the `vivado.jou` and `vivado.log` files. The `vivado.jou` file contains just the commands, and the `vivado.log` file contains both commands and any returned messages.
+
+## Select the top level module
+
+```tcl
+# Syntax
+set_property top <module_name> [current_fileset]
+set_property top_file {<top_file_location>} [current_fileset]
+ 
+# Example
+set_property top wave_gen [current_fileset]
+set_property top_file {C:\projects\Lab5\LAB5\LAB5.srcs\sources_1\imports\ISE_project\wave_gen.v} [current_fileset]
+```
+
+## Elaborate design
+
+```tcl
+# Syntax
+synth_design -rtl -name <project_name>
+
+# Descripttion
+# Synthesize a design using Vivado Synthesis and open that design
+
+# Example
+synth_design -rtl -name rtl_1
+```
+

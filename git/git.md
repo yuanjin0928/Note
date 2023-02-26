@@ -79,7 +79,7 @@ Each line in a `gitignore` file specifies a pattern. When deciding whether to ig
 
 - Patterns read from the command line for those commands that support them. (命令行优先级最高)
 - Patterns read from a `.gitignore` file in the same directory as the path, or in any parent directory (up to the top-level of the working tree), with patterns in the higher level files being overridden by those in lower level files down to the directory containing the file. These patterns match relative to the location of the `.gitignore` file. A project normally includes such `.gitignore` files in its repository, containing patterns for files generated as part of the project build.  (其次`.gitignore`文件)
-- Patterns read from `$GIT_DIR/info/exclude`. (`.git`目录下`/info/exclue`文件)
+- Patterns read from `$GIT_DIR/info/exclude`. (`.git`目录下`/info/exclue`文件，路径相对于`.git`所在目录)
 - Patterns read from the file specified by the configuration variable `core.excludesFile`.
 
 Which file to place a pattern in depends on how the pattern is meant to be used.
