@@ -41,13 +41,63 @@ set_property top_file {C:\projects\Lab5\LAB5\LAB5.srcs\sources_1\imports\ISE_pro
 ## Elaborate design
 
 ```tcl
-# Syntax
-synth_design -rtl -name <project_name>
-
 # Descripttion
 # Synthesize a design using Vivado Synthesis and open that design
 
+# Syntax
+synth_design -rtl -name <project_name>
+
 # Example
 synth_design -rtl -name rtl_1
+```
+
+## Create project
+
+```tcl
+# Description:
+# Create a new project
+
+# Syntax:
+create_project  [-part <arg>] [-force] [-in_memory] [-ip] [-rtl_kernel]
+                [-quiet] [-verbose] [<name>] [<dir>]
+
+# Usage:
+  Name           Description
+  --------------------------
+  [-part]        Target part
+  [-force]       Overwrite existing project directory
+  [<name>]       Project name
+  [<dir>]        Directory where the project file is saved
+                 Default: .
+```
+
+# XDC语法
+
+## 普通IO口
+
+```tcl
+# 管脚约束
+set_property PACKAGE_PIN "引脚编号" [get_ports “端口名称”] 
+
+# 电平信号约束
+set_property IOSTANDARD "电平标准" [get_ports “端口名称”]
+
+# Examples 端口名称是数组的话用{ }包括起来
+set_property IOSTANDARD LVCMOS33 [get_ports {led[3]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {led[2]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {led[1]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {led[0]}]
+set_property PACKAGE_PIN J16 [get_ports {led[3]}]
+set_property PACKAGE_PIN K16 [get_ports {led[2]}]
+set_property PACKAGE_PIN M15 [get_ports {led[1]}]
+set_property PACKAGE_PIN M14 [get_ports {led[0]}]
+set_property SLEW SLOW [get_ports {led[3]}]
+set_property SLEW SLOW [get_ports {led[2]}]
+set_property SLEW SLOW [get_ports {led[1]}]
+set_property SLEW SLOW [get_ports {led[0]}]
+set_property PACKAGE_PIN N15 [get_ports rst_n]
+set_property PACKAGE_PIN U18 [get_ports sys_clk]
+set_property IOSTANDARD LVCMOS33 [get_ports rst_n]
+set_property IOSTANDARD LVCMOS33 [get_ports sys_clk]
 ```
 
