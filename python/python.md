@@ -75,4 +75,3 @@ path.exist()
 path = pathlib.Path("path/file")
 path.is_file()
 ```
-
