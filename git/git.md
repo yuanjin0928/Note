@@ -114,3 +114,117 @@ Two consecutive asterisks ("`**`") in patterns matched against full pathname may
 - The pattern `doc/frotz` and `/doc/frotz` have the same effect in any `.gitignore` file. In other words, a leading slash is not relevant if there is already a middle slash in the pattern.
 - The pattern "`foo/*`", matches "`foo/test.json`" (a regular file), "`foo/bar`" (a directory), but it does not match "`foo/bar/hello.c`" (a regular file), as the asterisk in the pattern does not match "`bar/hello.c`" which has a slash in it.
 
+# Tagging
+
+## Listing Your Tags
+
+Listing the existing tags in Git is straightforward. Just type `git tag` (with optional `-l` or `--list`):
+
+```bash
+git tag
+```
+
+This command lists the tags in alphabetical order; the order in which they are displayed has no real importance.
+
+You can also search for tags that match a particular pattern. The Git source repo, for instance, contains more than 500 tags. If you’re interested only in looking at the 1.8.5 series, you can run this:
+
+```bash
+# Listing tag wildcards requires `-l` or `--list` option
+git tag -l "v1.8.5*"
+```
+
+## Creating Tags
+
+Git supports two types of tags: *lightweight* and *annotated*.
+
+A lightweight tag is very much like a branch that doesn’t change — it’s just a pointer to a specific commit.
+
+Annotated tags, however, are stored as full objects in the Git  database. They’re checksummed; contain the tagger name, email, and date; have a  tagging message; and can be signed and verified with GNU Privacy Guard  (GPG). It’s generally recommended that you create annotated tags so you can  have all this information; but if you want a temporary tag or for some  reason don’t want to keep the other information, lightweight tags are  available too.
+
+### Annotated Tags
+
+Creating an annotated tag in Git is simple. The easiest way is to specify `-a` when you run the `tag` command:
+
+```bash
+git tag -a v1.4 -m "my version 1.4"
+```
+
+The `-m` specifies a tagging message, which is stored with the tag. If you don’t specify a message for an annotated tag, Git launches your editor so you can type it in.
+
+You can see the tag data along with the commit that was tagged by using the `git show` command:
+
+```bash
+git show v1.4
+```
+
+### Lightweight Tags
+
+Another way to tag commits is with a lightweight tag. This is basically the commit checksum stored in a file — no other information is kept. To create a lightweight tag, don’t supply any of the `-a`, `-s`, or `-m` options, just provide a tag name:
+
+```bash
+git tag v1.4-lw
+```
+
+### Tagging Later
+
+You can also tag commits after you’ve moved past them. To tag that commit, you specify the commit checksum (or part of it) at the end of the command:
+
+```bash
+git tag -a v1.2 9fceb02
+```
+
+### Sharing Tags
+
+By default, the `git push` command doesn’t transfer tags to remote servers. You will have to explicitly push tags to a shared server after you have created them. This process is just like sharing remote branches — you can run `git push origin <tagname>`.
+
+```bash
+git push origin v1.5
+```
+
+If you have a lot of tags that you want to push up at once, you can also use the `--tags` option to the `git push` command. This will transfer all of your tags to the remote server that are not already there.
+
+```bash
+git push origin --tags
+```
+
+Now, when someone else clones or pulls from your repository, they will get all your tags as well.
+
+### Deleting Tags
+
+To delete a tag on your local repository, you can use `git tag -d <tagname>`. For example, we could remove our lightweight tag above as follows:
+
+```bash
+git tag -d v1.4-lw
+```
+
+Note that this does not remove the tag from any remote servers. There are two common variations for deleting a tag from a remote server.
+
+The first variation is `git push <remote> :refs/tags/<tagname>`:
+
+```bash
+git push origin :refs/tags/v1.4-lw
+```
+
+The way to interpret the above is to read it as the null value before the colon is being pushed to the remote tag name, effectively deleting  it.
+
+The second (and more intuitive) way to delete a remote tag is with:
+
+```bash
+git push origin --delete <tagname>
+```
+
+### Checking out Tags
+
+If you want to view the versions of files a tag is pointing to, you can do a `git checkout` of that tag, although this puts your repository in “detached HEAD” state, which has some ill side effects:
+
+```bash
+git checkout v2.0.0
+```
+
+In “detached HEAD” state, if you make changes and then create a commit,  the tag will stay the same, but your new commit won’t belong to any  branch and will be unreachable, except by the exact commit hash. Thus, if you need to make changes — say you’re fixing a bug on an older  version, for instance — you will generally want to create a branch:
+
+```bash
+git checkout -b version2 v2.0.0
+```
+
+If you do this and make a commit, your `version2` branch will be slightly different than your `v2.0.0` tag since it will move forward with your new changes, so do be careful.
